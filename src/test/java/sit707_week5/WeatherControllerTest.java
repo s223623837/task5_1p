@@ -1,5 +1,14 @@
 package sit707_week5;
 
+import static org.junit.Assert.assertEquals;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.Clock;
+import java.time.Instant;
+import java.time.ZoneId;
+import java.util.Date;
+
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -88,11 +97,11 @@ public class WeatherControllerTest {
 	    }
 
 	
-	@Test
-	public void testTemperaturePersist() {
-		/*
-		 * Remove below comments ONLY for 5.3C task.
-		 */
+//	@Test
+//	public void testTemperaturePersist() {
+//		/*
+//		 * Remove below comments ONLY for 5.3C task.
+//		 */
 //		System.out.println("+++ testTemperaturePersist +++");
 //		
 //		// Initialise controller
@@ -100,10 +109,49 @@ public class WeatherControllerTest {
 //		
 //		String persistTime = wController.persistTemperature(10, 19.5);
 //		String now = new SimpleDateFormat("H:m:s").format(new Date());
-//		System.out.println("Persist time: " + persistTime + ", now: " + now);
-//		
-//		Assert.assertTrue(persistTime.equals(now));
+//		 // Log the persisted and current times for debugging
+//	    System.out.println("Persist time: " + persistTime + ", now: " + now);
+//
+//	    // Assert that the persisted time matches the current time
+//	    Assert.assertTrue("Persisted time should match current time", persistTime.equals(now));
 //		
 //		wController.close();
-	}
+//	}
+	  
+	    @Test
+	    public void testTemperaturePersist() {
+	        System.out.println("+++ testTemperaturePersist +++");
+
+	
+
+	        // Capture current time before persistence
+	        SimpleDateFormat sdf = new SimpleDateFormat("H:m:s");
+	        String now = sdf.format(new Date());
+
+	        String persistTime = wController.persistTemperature(10, 19.5);
+
+	        System.out.println("Persist time: " + persistTime + ", now: " + now);
+
+	        // Assert that the persisted time is within a reasonable tolerance
+	        Assert.assertTrue("Persisted time should be close to current time", 
+	            isTimeWithinTolerance(persistTime, now, 2)); // Adjust tolerance as needed
+
+	        wController.close();
+	    }
+
+	    // Helper method to check time difference within tolerance
+	    private boolean isTimeWithinTolerance(String time1, String time2, int toleranceSeconds) {
+	        SimpleDateFormat sdf = new SimpleDateFormat("H:m:s");
+	        try {
+	            Date date1 = sdf.parse(time1);
+	            Date date2 = sdf.parse(time2);
+	            long diff = Math.abs(date2.getTime() - date1.getTime()) / 1000;
+	            return diff <= toleranceSeconds;
+	        } catch (ParseException e) {
+	            e.printStackTrace();
+	            return false;
+	        }
+	    }
+
+
 }

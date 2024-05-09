@@ -1,6 +1,8 @@
 package sit707_week5;
 
 import java.text.SimpleDateFormat;
+import java.time.Clock;
+import java.time.Instant;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.Random;
@@ -125,7 +127,7 @@ public class WeatherController {
 		
 		return savedTime;
 	}
-	
+
 	/**
 	 * Calculated the number of hours temperature data is available for today.
 	 * @return
